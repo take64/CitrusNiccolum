@@ -10,9 +10,15 @@
 
 #import "CNMediaObjectAudio.h"
 
-static NSString *const kMediaSources= @"mediaSources";
-static NSString *const kMediaGroup  = @"rootMediaGroup";
-static NSString *const kMediaObjects= @"mediaObjects";
+#pragma mark - static variables
+//
+// static variables
+//
+static NSString * const kMediaSources= @"mediaSources";
+static NSString * const kMediaGroup  = @"rootMediaGroup";
+static NSString * const kMediaObjects= @"mediaObjects";
+
+
 
 @interface CNMediaItunes()
 
@@ -23,12 +29,16 @@ static NSString *const kMediaObjects= @"mediaObjects";
 
 @end
 
+
+
 @implementation CNMediaItunes
 
 //
 // synthesize
 //
 @synthesize library;
+
+
 
 #pragma mark - method
 //
@@ -47,10 +57,11 @@ static NSString *const kMediaObjects= @"mediaObjects";
 // 通知受け取り
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
 {
+    // 対象オブジェクト
+    id value = [change objectForKey:NSKeyValueChangeNewKey];
     // メディアソースの取得
     if (object == [self library] && [keyPath isEqual:kMediaSources] == YES)
     {
-        id value = [change objectForKey:NSKeyValueChangeNewKey];
         [self setSource:[value objectForKey:MLMediaSourceiTunesIdentifier]];
         [[self source] addObserver:self forKeyPath:kMediaGroup options:NSKeyValueObservingOptionNew context:nil];
         [[self source] rootMediaGroup];
@@ -58,7 +69,6 @@ static NSString *const kMediaObjects= @"mediaObjects";
     // メディアグループの取得
     else if (object == [self source] && [keyPath isEqual:kMediaGroup] == YES)
     {
-        id value = [change objectForKey:NSKeyValueChangeNewKey];
         [self setGroup:value];
         [[self group] addObserver:self forKeyPath:kMediaObjects options:NSKeyValueObservingOptionNew context:nil];
         [[self group] mediaObjects];
@@ -66,12 +76,11 @@ static NSString *const kMediaObjects= @"mediaObjects";
     // メディアオブジェクトの取得
     else if (object == [self group] && [keyPath isEqual:kMediaObjects] == YES)
     {
-        id value = [change objectForKey:NSKeyValueChangeNewKey];
         for (MLMediaObject *object in value)
         {
-            CNMediaObjectAudio *_mediaObjectAudio = [[CNMediaObjectAudio alloc] init];
-            [_mediaObjectAudio loadObject:object];
-            [[self mediaObjects] addObject:_mediaObjectAudio];
+            [[self mediaObjects] addObject:
+             [CNMediaObjectAudio newWithObject:object]
+             ];
         }
         NSLog(@"end");
     }

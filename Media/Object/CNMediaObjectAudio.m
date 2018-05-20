@@ -61,35 +61,9 @@
     [self setArtworkImage:[mediaObject artworkImage]];
 
     // 要素キーペア
-    NSDictionary *parseKeys = @{
-                                @"Name"         :@"name",
-                                @"fileSize"     :@"fileSize",
-                                @"Sample Rate"  :@"sampleRate",
-                                @"Kind"         :@"kind",
-                                @"Track Number" :@"trackNumber",
-                                @"Track Count"  :@"trackCount",
-                                @"Date Added"   :@"dateAdded",
-                                @"Date Modified":@"dateModified",
-                                @"Year"         :@"year",
-                                @"Composer"     :@"composer",
-                                @"Artist"       :@"artist",
-                                @"Bit Rate"     :@"bitRate",
-                                @"Track ID"     :@"trackId",
-                                @"Total Time"   :@"totalTime",
-                                @"Genre"        :@"genre",
-                                @"URL"          :@"location",
-                                @"Album"        :@"album",
-                                };
-    // 除外要素
-    NSArray *ignoreKeys = @[
-                            @"name",
-                            @"identifier",
-                            @"mediaSourceIdentifier",
-                            @"modificationDate",
-                            @"mediaType",
-                            @"contentType",
-                            @"Duration",
-                            ];
+    NSDictionary *parseKeys = [CNMediaObjectAudio callParseKeys];
+    // 除外要素キー
+    NSArray *ignoreKeys     = [CNMediaObjectAudio callIgnoreKeys];
     
     // パースする
     NSDictionary *attrs = [mediaObject attributes];
@@ -115,5 +89,74 @@
     }
 }
 
+
+
+#pragma mark - static method
+//
+// static method
+//
+
+// メディアオブジェクトを読み込んで生成
++ (instancetype)newWithObject:(MLMediaObject *)mediaObject
+{
+    CNMediaObjectAudio *object = [self new];
+    [object loadObject:mediaObject];
+    return object;
+}
+
+
+
+#pragma mark - singleton
+//
+// singleton
+//
+
+// 要素キーペア
++ (NSDictionary *)callParseKeys
+{
+    static NSDictionary *parseKeys = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        parseKeys = @{
+                      @"Name"           :@"name",
+                      @"fileSize"       :@"fileSize",
+                      @"Sample Rate"    :@"sampleRate",
+                      @"Kind"           :@"kind",
+                      @"Track Number"   :@"trackNumber",
+                      @"Track Count"    :@"trackCount",
+                      @"Date Added"     :@"dateAdded",
+                      @"Date Modified"  :@"dateModified",
+                      @"Year"           :@"year",
+                      @"Composer"       :@"composer",
+                      @"Artist"         :@"artist",
+                      @"Bit Rate"       :@"bitRate",
+                      @"Track ID"       :@"trackId",
+                      @"Total Time"     :@"totalTime",
+                      @"Genre"          :@"genre",
+                      @"URL"            :@"location",
+                      @"Album"          :@"album",
+                      };
+    });
+    return parseKeys;
+}
+
+// 除外要素キー
++ (NSArray *)callIgnoreKeys
+{
+    static NSArray *ignoreKeys = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ignoreKeys = @[
+                       @"name",
+                       @"identifier",
+                       @"mediaSourceIdentifier",
+                       @"modificationDate",
+                       @"mediaType",
+                       @"contentType",
+                       @"Duration",
+                       ];
+    });
+    return ignoreKeys;
+}
 
 @end

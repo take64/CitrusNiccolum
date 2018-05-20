@@ -94,4 +94,11 @@
 
 
 
+//
+// static method
+//
+
+// メディアオブジェクトを読み込んで生成
++ (instancetype)newWithObject:(MLMediaObject *)mediaObject;
+
 @end
