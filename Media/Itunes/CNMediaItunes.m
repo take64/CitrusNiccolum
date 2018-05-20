@@ -8,9 +8,15 @@
 
 #import "CNMediaItunes.h"
 
+#import "CNMediaObjectAudio.h"
+
+static NSString *const kMediaSources= @"mediaSources";
+static NSString *const kMediaGroup  = @"rootMediaGroup";
+static NSString *const kMediaObjects= @"mediaObjects";
+
 @interface CNMediaItunes()
 
-//@property MLMediaLibrary *library;
+@property MLMediaLibrary *library;
 @property MLMediaSource *source;
 @property MLMediaGroup *group;
 @property NSMutableArray<CNMediaObjectAudio *> *mediaObjects;
@@ -34,7 +40,7 @@
 {
     // ライブラリ
     MLMediaLibrary *_library = [self callLibrary];
-    [_library addObserver:self forKeyPath:CNMediaLibraryPropertyKeyMediaSources options:NSKeyValueObservingOptionNew context:nil];
+    [_library addObserver:self forKeyPath:kMediaSources options:NSKeyValueObservingOptionNew context:nil];
     [_library mediaSources];
 }
 
@@ -42,23 +48,23 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
 {
     // メディアソースの取得
-    if (object == [self library] && [keyPath isEqual:CNMediaLibraryPropertyKeyMediaSources] == YES)
+    if (object == [self library] && [keyPath isEqual:kMediaSources] == YES)
     {
         id value = [change objectForKey:NSKeyValueChangeNewKey];
         [self setSource:[value objectForKey:MLMediaSourceiTunesIdentifier]];
-        [[self source] addObserver:self forKeyPath:CNMediaLibraryPropertyKeyMediaGroup options:NSKeyValueObservingOptionNew context:nil];
+        [[self source] addObserver:self forKeyPath:kMediaGroup options:NSKeyValueObservingOptionNew context:nil];
         [[self source] rootMediaGroup];
     }
     // メディアグループの取得
-    else if (object == [self source] && [keyPath isEqual:CNMediaLibraryPropertyKeyMediaGroup] == YES)
+    else if (object == [self source] && [keyPath isEqual:kMediaGroup] == YES)
     {
         id value = [change objectForKey:NSKeyValueChangeNewKey];
         [self setGroup:value];
-        [[self group] addObserver:self forKeyPath:CNMediaLibraryPropertyKeyMediaObjects options:NSKeyValueObservingOptionNew context:nil];
+        [[self group] addObserver:self forKeyPath:kMediaObjects options:NSKeyValueObservingOptionNew context:nil];
         [[self group] mediaObjects];
     }
     // メディアオブジェクトの取得
-    else if (object == [self group] && [keyPath isEqual:CNMediaLibraryPropertyKeyMediaObjects] == YES)
+    else if (object == [self group] && [keyPath isEqual:kMediaObjects] == YES)
     {
         id value = [change objectForKey:NSKeyValueChangeNewKey];
         for (MLMediaObject *object in value)

@@ -10,22 +10,15 @@
 
 #import <MediaLibrary/MediaLibrary.h>
 
-#import "CNMediaObjectAudio.h"
-
-typedef NSString* CNMediaLibraryPropertyKey;
-#define CNMediaLibraryPropertyKeyMediaSources   @"mediaSources"
-#define CNMediaLibraryPropertyKeyMediaGroup     @"rootMediaGroup"
-#define CNMediaLibraryPropertyKeyMediaObjects   @"mediaObjects"
-
 @interface CNMediaItunes : NSObject
 {
-    MLMediaLibrary *library;
+//    MLMediaLibrary *library;
 }
 
 //
 // property
 //
-@property (nonatomic, retain) MLMediaLibrary *library;
+//@property (nonatomic, retain) MLMediaLibrary *library;
 
 
 //
