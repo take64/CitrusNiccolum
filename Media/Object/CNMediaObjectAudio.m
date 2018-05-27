@@ -10,23 +10,24 @@
 
 @implementation CNMediaObjectAudio
 
-
-
+#pragma mark - synthesize
 //
 // synthesize
 //
-@synthesize identifier;
+@synthesize trackId;
+@synthesize trackType;
+@synthesize trackNumber;
+@synthesize trackCount;
+
+//@synthesize identifier;
 @synthesize name;
 @synthesize artworkImage;
 @synthesize fileSize;
 
-@synthesize trackId;
 //@synthesize size;
 @synthesize totalTime;
 @synthesize discNumber;
 @synthesize discCount;
-@synthesize trackNumber;
-@synthesize trackCount;
 @synthesize year;
 @synthesize dateModified;
 @synthesize dateAdded;
@@ -35,7 +36,6 @@
 @synthesize compilation;
 @synthesize persistantId;
 @synthesize disabled;
-@synthesize trackType;
 @synthesize fileType;
 @synthesize fileFolderCount;
 @synthesize libraryFolderCount;
@@ -57,13 +57,18 @@
 // メディアオブジェクト読み込み
 - (void)loadObject:(MLMediaObject *)mediaObject
 {
-    [self setIdentifier:[mediaObject identifier]];
+//    [self setIdentifier:[mediaObject identifier]];
     [self setArtworkImage:[mediaObject artworkImage]];
+    
+//    if ([[self identifier] isEqualToString:@"3160F5D6408F5D9F"] == YES)
+//    {
+//        CFLog(@"%@", mediaObject);
+//    }
 
     // 要素キーペア
-    NSDictionary *parseKeys = [CNMediaObjectAudio callParseKeys];
+    NSDictionary *parseKeys = [CNMediaObjectAudio callMediaObjectParseKeys];
     // 除外要素キー
-    NSArray *ignoreKeys     = [CNMediaObjectAudio callIgnoreKeys];
+    NSArray *ignoreKeys     = [CNMediaObjectAudio callMediaObjectIgnoreKeys];
     
     // パースする
     NSDictionary *attrs = [mediaObject attributes];
@@ -79,12 +84,73 @@
         if ([[parseKeys allKeys] containsObject:attrKey] == YES)
         {
             NSString *newKey = [parseKeys objectForKey:attrKey];
-            [self setValue:[attrs objectForKey:attrKey] forKey:newKey];
+            [self replaceValue:[attrs objectForKey:attrKey]  forKey:newKey];
         }
         // 要素がない
         else
         {
-            NSLog(@"none key = %@, value = %@", attrKey, [attrs objectForKey:attrKey]);
+            CFLog(@"none key = %@, value = %@", attrKey, [attrs objectForKey:attrKey]);
+        }
+    }
+}
+
+// iTunes Library.xml読み込み
+- (void)loadXml:(NSDictionary *)xmlDic
+{
+    // 要素キーペア
+    NSDictionary *parseKeys = [CNMediaObjectAudio callItunesXmlParseKeys];
+    // 除外要素キー
+    NSArray *ignoreKeys     = [CNMediaObjectAudio callItunesXmlIgnoreKeys];
+    
+    // パースする
+    NSDictionary *attrs = xmlDic;
+    for (NSString *attrKey in [attrs allKeys])
+    {
+        // 除外要素の場合
+        if ([ignoreKeys containsObject:attrKey] == YES)
+        {
+            continue;
+        }
+        
+        // 要素がある
+        if ([[parseKeys allKeys] containsObject:attrKey] == YES)
+        {
+            NSString *newKey = [parseKeys objectForKey:attrKey];
+            [self replaceValue:[attrs objectForKey:attrKey]  forKey:newKey];
+        }
+        // 要素がない
+        else
+        {
+            CFLog(@"none key = %@, value = %@", attrKey, [attrs objectForKey:attrKey]);
+        }
+    }
+}
+
+
+
+#pragma mark - private
+//
+// private
+//
+
+// 要素の置き換え
+- (void)replaceValue:(id)value forKey:(NSString *)key
+{
+    // 旧値の取得
+    id oldValue = [self valueForKey:key];
+    // 旧値がnilの場合は設定
+    if (oldValue == nil)
+    {
+        [self setValue:value forKey:key];
+    }
+    else
+    {
+        // 比較のため文字列化
+        NSString *newValueString = [NSString stringWithFormat:@"%@", value];
+        NSString *oldValueString = [NSString stringWithFormat:@"%@", oldValue];
+        if ([newValueString isEqualToString:oldValueString] == NO)
+        {
+            CFLog(@"not compare key = %@, old = %@, new = %@", key, oldValue, value);
         }
     }
 }
@@ -106,13 +172,13 @@
 
 
 
-#pragma mark - singleton
+#pragma mark - caller
 //
-// singleton
+// caller
 //
 
-// 要素キーペア
-+ (NSDictionary *)callParseKeys
+// MLMediaObject要素キーペア
++ (NSDictionary *)callMediaObjectParseKeys
 {
     static NSDictionary *parseKeys = nil;
     static dispatch_once_t onceToken;
@@ -122,6 +188,7 @@
                       @"fileSize"       :@"fileSize",
                       @"Sample Rate"    :@"sampleRate",
                       @"Kind"           :@"kind",
+                      @"Track ID"       :@"trackId",
                       @"Track Number"   :@"trackNumber",
                       @"Track Count"    :@"trackCount",
                       @"Date Added"     :@"dateAdded",
@@ -130,7 +197,6 @@
                       @"Composer"       :@"composer",
                       @"Artist"         :@"artist",
                       @"Bit Rate"       :@"bitRate",
-                      @"Track ID"       :@"trackId",
                       @"Total Time"     :@"totalTime",
                       @"Genre"          :@"genre",
                       @"URL"            :@"location",
@@ -140,8 +206,8 @@
     return parseKeys;
 }
 
-// 除外要素キー
-+ (NSArray *)callIgnoreKeys
+// MLMediaObject除外要素キー
++ (NSArray *)callMediaObjectIgnoreKeys
 {
     static NSArray *ignoreKeys = nil;
     static dispatch_once_t onceToken;
@@ -154,6 +220,69 @@
                        @"mediaType",
                        @"contentType",
                        @"Duration",
+                       ];
+    });
+    return ignoreKeys;
+}
+
+// iTunesXml要素キーペア
++ (NSDictionary *)callItunesXmlParseKeys
+{
+    static NSDictionary *parseKeys = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        parseKeys = @{
+                      @"Track Type"     :@"trackType",
+                      @"Sample Rate"    :@"sampleRate",
+                      @"Disc Number"    :@"discNumber",
+                      @"Kind"           :@"kind",
+                      @"File Type"      :@"fileType",
+                      @"Track Count"    :@"trackCount",
+                      @"Date Added"     :@"dateAdded",
+                      @"Name"           :@"name",
+                      @"Track Number"   :@"trackNumber",
+                      @"Size"           :@"fileSize",
+                      @"Year"           :@"year",
+                      @"Composer"       :@"composer",
+                      @"Location"       :@"location",
+                      @"Artist"         :@"artist",
+                      @"Bit Rate"       :@"bitRate",
+                      @"Disc Count"     :@"discCount",
+                      @"Persistent ID"  :@"trackId",
+                      @"Total Time"     :@"totalTime",
+                      @"Date Modified"  :@"dateModified",
+                      @"Album"          :@"album",
+                      @"Genre"          :@"genre",
+                      @"Disabled"       :@"disabled",
+                      @"Compilation"    :@"compilation",
+                      @"Album Artist"   :@"albumArtist",
+                      };
+    });
+    return parseKeys;
+}
+
+// iTunesXml除外要素キー
++ (NSArray *)callItunesXmlIgnoreKeys
+{
+    static NSArray *ignoreKeys = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ignoreKeys = @[
+                       @"Skip Date",
+                       @"Play Date",
+                       @"Play Date UTC",
+                       @"Skip Count",
+                       @"Play Count",
+                       @"Artwork Count",
+                       @"Library Folder Count",
+                       @"File Folder Count",
+                       @"Comments",
+                       
+                       @"Sort Composer",
+                       @"Sort Artist",
+                       @"Sort Album",
+                       @"Sort Name",
+                       @"Track ID",
                        ];
     });
     return ignoreKeys;

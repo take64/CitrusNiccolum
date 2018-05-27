@@ -10,22 +10,18 @@
 
 #import <MediaLibrary/MediaLibrary.h>
 
+#import "CitrusFerrumTypedef.h"
+
 @interface CNMediaItunes : NSObject
-{
-//    MLMediaLibrary *library;
-}
-
-//
-// property
-//
-//@property (nonatomic, retain) MLMediaLibrary *library;
-
 
 //
 // method
 //
 
 // iTunesライブラリの読み込み
-- (void)loadItunesLibrary;
+- (void)loadItunesLibraryWithComplete:(CitrusFerrumCompleteBlock)block;
+
+// iTunesライブラリの読み込み(iTunes Library.xmlから)
+- (void)loadItunesLibraryFromXml:(NSString *)xmlPath;
 
 @end

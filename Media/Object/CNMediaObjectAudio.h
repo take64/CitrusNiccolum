@@ -6,24 +6,27 @@
 //  Copyright © 2018年 citrus.tk. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "CFObject.h"
 
 #import <MediaLibrary/MediaLibrary.h>
 
-@interface CNMediaObjectAudio : NSObject
+@interface CNMediaObjectAudio : CFObject
 {
-    NSString *identifier;
+    NSNumber *trackId;
+    NSString *trackType;
+    NSNumber *trackNumber;
+    NSNumber *trackCount;
+    
+    
+//    NSString *identifier;
     NSString *name;
     NSImage *artworkImage;
     NSNumber *fileSize;
     
-    NSNumber *trackId;
 //    NSNumber *size;
     NSNumber *totalTime;
     NSNumber *discNumber;
     NSNumber *discCount;
-    NSNumber *trackNumber;
-    NSNumber *trackCount;
     NSNumber *year;
     NSDate *dateModified;
     NSDate *dateAdded;
@@ -32,7 +35,6 @@
     NSNumber *compilation;
     NSString *persistantId;
     NSNumber *disabled;
-    NSString *trackType;
     NSNumber *fileType;
     NSNumber *fileFolderCount;
     NSNumber *libraryFolderCount;
@@ -45,23 +47,22 @@
     NSString *location;
 }
 
-
-
 //
 // property
 //
-@property(nonatomic, retain) NSString *identifier;
+@property(nonatomic, retain) NSNumber *trackId;
+@property(nonatomic, retain) NSString *trackType;
+@property(nonatomic, retain) NSNumber *trackNumber;
+@property(nonatomic, retain) NSNumber *trackCount;
+//@property(nonatomic, retain) NSString *identifier;
 @property(nonatomic, retain) NSString *name;
 @property(nonatomic, retain) NSImage *artworkImage;
 @property(nonatomic, retain) NSNumber *fileSize;
 
-@property(nonatomic, retain) NSNumber *trackId;
 //@property(nonatomic, retain) NSNumber *size;
 @property(nonatomic, retain) NSNumber *totalTime;
 @property(nonatomic, retain) NSNumber *discNumber;
 @property(nonatomic, retain) NSNumber *discCount;
-@property(nonatomic, retain) NSNumber *trackNumber;
-@property(nonatomic, retain) NSNumber *trackCount;
 @property(nonatomic, retain) NSNumber *year;
 @property(nonatomic, retain) NSDate *dateModified;
 @property(nonatomic, retain) NSDate *dateAdded;
@@ -70,7 +71,6 @@
 @property(nonatomic, retain) NSNumber *compilation;
 @property(nonatomic, retain) NSString *persistantId;
 @property(nonatomic, retain) NSNumber *disabled;
-@property(nonatomic, retain) NSString *trackType;
 @property(nonatomic, retain) NSNumber *fileType;
 @property(nonatomic, retain) NSNumber *fileFolderCount;
 @property(nonatomic, retain) NSNumber *libraryFolderCount;
@@ -91,6 +91,9 @@
 
 // メディアオブジェクト読み込み
 - (void)loadObject:(MLMediaObject *)mediaObject;
+
+// iTunes Library.xml読み込み
+- (void)loadXml:(NSDictionary *)xmlDic;
 
 
 

@@ -14,10 +14,10 @@
 //
 // static variables
 //
-static NSString * const kMediaSources= @"mediaSources";
-static NSString * const kMediaGroup  = @"rootMediaGroup";
-static NSString * const kMediaObjects= @"mediaObjects";
-
+static NSString * const kMediaSources   = @"mediaSources";
+static NSString * const kMediaGroup     = @"rootMediaGroup";
+static NSString * const kMediaObjects   = @"mediaObjects";
+static NSString * const kXmlTracks      = @"Tracks";
 
 
 @interface CNMediaItunes()
@@ -26,6 +26,7 @@ static NSString * const kMediaObjects= @"mediaObjects";
 @property MLMediaSource *source;
 @property MLMediaGroup *group;
 @property NSMutableArray<CNMediaObjectAudio *> *mediaObjects;
+@property CitrusFerrumCompleteBlock completeBlock;
 
 @end
 
@@ -33,25 +34,54 @@ static NSString * const kMediaObjects= @"mediaObjects";
 
 @implementation CNMediaItunes
 
-//
-// synthesize
-//
-@synthesize library;
-
-
-
 #pragma mark - method
 //
 // method
 //
 
+// 初期化
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        [self setMediaObjects:[NSMutableArray new]];
+    }
+    return self;
+}
+
 // iTunesライブラリの読み込み
-- (void)loadItunesLibrary
+- (void)loadItunesLibraryWithComplete:(CitrusFerrumCompleteBlock)block;
 {
     // ライブラリ
     MLMediaLibrary *_library = [self callLibrary];
     [_library addObserver:self forKeyPath:kMediaSources options:NSKeyValueObservingOptionNew context:nil];
     [_library mediaSources];
+    // 実行ブロック
+    [self setCompleteBlock:block];
+}
+
+// iTunesライブラリの読み込み(iTunes Library.xmlから)
+- (void)loadItunesLibraryFromXml:(NSString *)xmlPath
+{
+    if ([[NSFileManager defaultManager] fileExistsAtPath:xmlPath] == NO)
+    {
+        CFLog(@"ない");
+    }
+    
+    NSDictionary *dic = [NSDictionary dictionaryWithContentsOfFile:xmlPath];
+//    CFLog(@"%@", dic[kXmlTracks]);
+    
+    for (id key in dic[kXmlTracks])
+    {
+//        CFLog(@"key = %@", key);
+        NSDictionary *val = dic[kXmlTracks][key];
+//        CFLog(@"val = %@", val);
+        NSString *persistentId = [val objectForKey:@"Persistent ID"];
+        CNMediaObjectAudio *mediaObject = [self searchOfTrackId:persistentId];
+//        CFLog(@"%@", mediaObject);
+        [mediaObject loadXml:val];
+    }
 }
 
 // 通知受け取り
@@ -82,12 +112,41 @@ static NSString * const kMediaObjects= @"mediaObjects";
              [CNMediaObjectAudio newWithObject:object]
              ];
         }
-        NSLog(@"end");
+        if (self.completeBlock != nil)
+        {
+            self.completeBlock();
+        }
+        
+        // 通知を全て止める
+        [[self library] removeObserver:self forKeyPath:kMediaSources];
+        [[self source] removeObserver:self forKeyPath:kMediaGroup];
+        [[self group] removeObserver:self forKeyPath:kMediaObjects];
+        
+        CFLog(@"end");
     }
     else
     {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+}
+
+
+
+#pragma mark - method
+//
+// method
+//
+
+// mediaObjectsの検索
+- (CNMediaObjectAudio *)searchOfTrackId:(NSString *)trackId
+{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"trackId = %@", trackId];
+    NSArray<CNMediaObjectAudio *> *results = [[self mediaObjects] filteredArrayUsingPredicate:predicate];
+    if ([results count] > 0)
+    {
+        return [results objectAtIndex:0];
+    }
+    return nil;
 }
 
 
