@@ -7,20 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B422D5BA2349FAB500D1429A /* CNCCursor.h in Headers */ = {isa = PBXBuildFile; fileRef = B422D5B82349FAB500D1429A /* CNCCursor.h */; };
+		B422D5BA2349FAB500D1429A /* CNCCursor.h in Headers */ = {isa = PBXBuildFile; fileRef = B422D5B82349FAB500D1429A /* CNCCursor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B422D5BB2349FAB500D1429A /* CNCCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = B422D5B92349FAB500D1429A /* CNCCursor.m */; };
+		B422D64A234A0CA400D1429A /* CitrusFerrum.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B422D646234A0C9900D1429A /* CitrusFerrum.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		B46DA39C2349F4AB0045FEC2 /* CNMediaItunes.m in Sources */ = {isa = PBXBuildFile; fileRef = B46DA3962349F4AB0045FEC2 /* CNMediaItunes.m */; };
 		B46DA39D2349F4AB0045FEC2 /* CNMediaItunes.h in Headers */ = {isa = PBXBuildFile; fileRef = B46DA3972349F4AB0045FEC2 /* CNMediaItunes.h */; };
 		B46DA39E2349F4AB0045FEC2 /* CNMediaObjectAudio.h in Headers */ = {isa = PBXBuildFile; fileRef = B46DA3992349F4AB0045FEC2 /* CNMediaObjectAudio.h */; };
 		B46DA39F2349F4AB0045FEC2 /* CNMediaObjectAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = B46DA39A2349F4AB0045FEC2 /* CNMediaObjectAudio.m */; };
 		B46DA3A02349F4AB0045FEC2 /* CitrusNiccolumMedia.h in Headers */ = {isa = PBXBuildFile; fileRef = B46DA39B2349F4AB0045FEC2 /* CitrusNiccolumMedia.h */; };
-		B46DA3A32349F4BF0045FEC2 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B46DA3A12349F4BF0045FEC2 /* Info.plist */; };
 		B46DA3A42349F4BF0045FEC2 /* CitrusNiccolum.h in Headers */ = {isa = PBXBuildFile; fileRef = B46DA3A22349F4BF0045FEC2 /* CitrusNiccolum.h */; };
 		B4F655342349C47E00D4965C /* CitrusNiccolum.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4F6552A2349C47E00D4965C /* CitrusNiccolum.framework */; };
 		B4F655392349C47E00D4965C /* CitrusNiccolumTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B4F655382349C47E00D4965C /* CitrusNiccolumTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		B422D645234A0C9900D1429A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B422D640234A0C9900D1429A /* CitrusFerrum.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B422D5C6234A0A1600D1429A;
+			remoteInfo = CitrusFerrum;
+		};
+		B422D647234A0C9900D1429A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B422D640234A0C9900D1429A /* CitrusFerrum.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B422D5CF234A0A1600D1429A;
+			remoteInfo = CitrusFerrumTests;
+		};
 		B4F655352349C47E00D4965C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B4F655212349C47E00D4965C /* Project object */;
@@ -31,9 +45,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B422D5AC2349F86700D1429A /* CitrusNiccolumnConsole.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CitrusNiccolumnConsole.h; sourceTree = "<group>"; };
 		B422D5B82349FAB500D1429A /* CNCCursor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CNCCursor.h; sourceTree = "<group>"; };
 		B422D5B92349FAB500D1429A /* CNCCursor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CNCCursor.m; sourceTree = "<group>"; };
+		B422D640234A0C9900D1429A /* CitrusFerrum.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CitrusFerrum.xcodeproj; path = ../CitrusFerrum/CitrusFerrum.xcodeproj; sourceTree = "<group>"; };
 		B46DA3962349F4AB0045FEC2 /* CNMediaItunes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNMediaItunes.m; sourceTree = "<group>"; };
 		B46DA3972349F4AB0045FEC2 /* CNMediaItunes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNMediaItunes.h; sourceTree = "<group>"; };
 		B46DA3992349F4AB0045FEC2 /* CNMediaObjectAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNMediaObjectAudio.h; sourceTree = "<group>"; };
@@ -52,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B422D64A234A0CA400D1429A /* CitrusFerrum.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,12 +97,27 @@
 			path = Cursor;
 			sourceTree = "<group>";
 		};
+		B422D641234A0C9900D1429A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B422D646234A0C9900D1429A /* CitrusFerrum.framework */,
+				B422D648234A0C9900D1429A /* CitrusFerrumTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B422D649234A0CA400D1429A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B46DA3932349F4960045FEC2 /* Console */ = {
 			isa = PBXGroup;
 			children = (
 				B422D5B72349FA8400D1429A /* Cursor */,
 				B422D5B22349F93900D1429A /* Display */,
-				B422D5AC2349F86700D1429A /* CitrusNiccolumnConsole.h */,
 			);
 			path = Console;
 			sourceTree = "<group>";
@@ -123,9 +153,11 @@
 		B4F655202349C47E00D4965C = {
 			isa = PBXGroup;
 			children = (
+				B422D640234A0C9900D1429A /* CitrusFerrum.xcodeproj */,
 				B4F6552C2349C47E00D4965C /* CitrusNiccolum */,
 				B4F655372349C47E00D4965C /* CitrusNiccolumTests */,
 				B4F6552B2349C47E00D4965C /* Products */,
+				B422D649234A0CA400D1429A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -165,10 +197,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B46DA39E2349F4AB0045FEC2 /* CNMediaObjectAudio.h in Headers */,
 				B422D5BA2349FAB500D1429A /* CNCCursor.h in Headers */,
-				B46DA39D2349F4AB0045FEC2 /* CNMediaItunes.h in Headers */,
 				B46DA3A42349F4BF0045FEC2 /* CitrusNiccolum.h in Headers */,
+				B46DA39E2349F4AB0045FEC2 /* CNMediaObjectAudio.h in Headers */,
+				B46DA39D2349F4AB0045FEC2 /* CNMediaItunes.h in Headers */,
 				B46DA3A02349F4AB0045FEC2 /* CitrusNiccolumMedia.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -240,6 +272,12 @@
 			mainGroup = B4F655202349C47E00D4965C;
 			productRefGroup = B4F6552B2349C47E00D4965C /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = B422D641234A0C9900D1429A /* Products */;
+					ProjectRef = B422D640234A0C9900D1429A /* CitrusFerrum.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				B4F655292349C47E00D4965C /* CitrusNiccolum */,
@@ -248,12 +286,28 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXReferenceProxy section */
+		B422D646234A0C9900D1429A /* CitrusFerrum.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CitrusFerrum.framework;
+			remoteRef = B422D645234A0C9900D1429A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B422D648234A0C9900D1429A /* CitrusFerrumTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CitrusFerrumTests.xctest;
+			remoteRef = B422D647234A0C9900D1429A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
 /* Begin PBXResourcesBuildPhase section */
 		B4F655282349C47E00D4965C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B46DA3A32349F4BF0045FEC2 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
