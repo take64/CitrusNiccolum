@@ -6,7 +6,9 @@
 //  Copyright © 2018年 citrus.tk. All rights reserved.
 //
 
-#import "CFObject.h"
+#import <CitrusFerrum/CFObject.h>
+
+#import <CitrusFerrum/CitrusFerrumTypedef.h>
 
 #import <MediaLibrary/MediaLibrary.h>
 

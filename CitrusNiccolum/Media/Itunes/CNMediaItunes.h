@@ -10,7 +10,7 @@
 
 #import <MediaLibrary/MediaLibrary.h>
 
-#import "CitrusFerrumTypedef.h"
+#import <CitrusFerrum/CitrusFerrumTypedef.h>
 
 @interface CNMediaItunes : NSObject
 

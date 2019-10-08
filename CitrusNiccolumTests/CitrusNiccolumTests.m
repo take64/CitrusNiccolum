@@ -2,7 +2,7 @@
 //  CitrusNiccolumTests.m
 //  CitrusNiccolumTests
 //
-//  Created by takemoto.kouhei on 2019/10/06.
+//  Created by kouhei.takemoto on 2019/10/06.
 //  Copyright © 2019 citrus.tk. All rights reserved.
 //
 
